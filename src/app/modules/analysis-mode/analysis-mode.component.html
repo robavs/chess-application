@@ -1,0 +1,59 @@
+<div *ngIf=" showAnalysisFeatures" class="evaluation-bar">
+    <div class="center"></div>
+    <div class="percentage" [ngStyle]="{'height.%': evaluationBarPercentage}"></div>
+</div>
+
+<div *ngIf="showAnalysisFeatures" class="engine-top-lines">
+
+    <ng-container *ngIf="areMovesCalculated; then computerMoves; else calculationMessage">
+    </ng-container>
+
+    <ng-template #computerMoves>
+        <span *ngFor="let move of moves; let moveNumber = index;">
+            <p>
+                <span>{{currentMove + moveNumber}}. </span>
+                <span style="cursor:pointer" (click)="updateBoard(moveNumber * 2)"
+                    (mouseover)="previewBoard(moveNumber * 2 + 1)" (mouseleave)="leavePreviewMode()">
+                    {{move[0]}}
+                </span>
+                <span style="cursor:pointer" (click)="updateBoard(moveNumber * 2 + 1)"
+                    (mouseover)="previewBoard(moveNumber * 2 + 2)" (mouseleave)="leavePreviewMode()">
+                    {{move[1]}}
+                </span>
+            </p>
+        </span>
+    </ng-template>
+
+    <ng-template #calculationMessage>
+        <h2>Move Evaluation in process</h2>
+    </ng-template>
+</div>
+
+<mat-slide-toggle [checked]="showAnalysisFeatures" (change)="toggleAnalysisView()"></mat-slide-toggle>
+
+<chess-board #chessBoard>
+</chess-board>
+
+<ng-container *ngIf="isPreviewMode; then chessBoardPreviewImage"></ng-container>
+
+<ng-template #chessBoardPreviewImage>
+    <!--Moguce da ce trebati da ima flip mode-->
+    <div class="chess-board">
+        <div *ngFor="let row of chessBoardPreview; let x = index" class="row">
+
+            <div *ngFor="let piece of row; let y = index" class="square" [ngClass]="
+                        { 
+                            'king-in-check': isSquareChecked(x, y),
+                            'last-move': isSquareInLastMove(x, y),
+                            'dark': isSquareDark(x, y),
+                            'light': !isSquareDark(x, y)
+                        }">
+
+
+                <img *ngIf=" piece" class="piece" [src]="pieceImagePaths[piece]" [alt]="pieceImagePaths[piece]">
+
+            </div>
+
+        </div>
+    </div>
+</ng-template>

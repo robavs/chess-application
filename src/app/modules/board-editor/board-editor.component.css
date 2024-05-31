@@ -1,0 +1,68 @@
+.container {
+    justify-content: center;
+}
+
+.chess-board {
+    width: 480px;
+    height: 480px;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    width: 60px;
+}
+
+.dark {
+    background-color: #779AAF
+}
+
+.light {
+    background-color: #D9E4E8;
+}
+
+img {
+    width: 60px;
+    height: 50px;
+}
+
+.selected-piece {
+    box-shadow: inset rgb(0, 140, 196) 0px 0px 40px 0px, inset rgb(163, 11, 0) 0px 0px 40px 0px, inset rgba(0, 0, 0, 1) 0px 0px 36px -24px;
+}
+
+.pieces {
+    background-color: grey;
+    width: 480px;
+}
+
+.dragging-from {
+    box-shadow: inset rgb(0, 114, 44) 0px 0px 40px 0px, inset rgb(163, 11, 0) 0px 0px 40px 0px, inset rgba(0, 0, 0, 1) 0px 0px 36px -24px;
+}
+
+.options {
+    display: block;
+    border: 1px solid white
+}
+
+.options button {
+    width: 600px;
+    border: 1px solid red;
+}
+
+.rotated {
+    transform: rotate(180deg);
+}
+
+.fen-input {
+    width: 500px;
+}

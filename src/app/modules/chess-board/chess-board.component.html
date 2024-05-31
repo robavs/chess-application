@@ -1,0 +1,50 @@
+<div class="grid-container">
+    <div class="chess-board-container">
+        <div class="chess-board" [ngClass]="{'rotated': flipMode}">
+            <div *ngFor="let row of chessBoardView; let x = index" class="row">
+                <div *ngFor="let piece of row; let y = index" class="square" [ngClass]="
+                { 
+                    'selected-square': isSquareSelected(x, y),
+                    'king-in-check': isSuqareInCheck(x, y),
+                    'last-move': isSquareLastMove(x, y),
+                    'dark': isSquareDark(x, y),
+                    'light': !isSquareDark(x, y),
+                    'promotion-square': isSquarePromotion(x, y)
+                }" (click)="move(x, y)" (dragover)="dragover($event)" (drop)="drop($event, x, y)">
+
+                    <div [ngClass]="{'safe-square': isSquareSafeForSelectedPiece(x, y)}"></div>
+
+                    <img *ngIf="piece" [src]="pieceImagePaths[piece]" [alt]="pieceImagePaths[piece]"
+                        [ngClass]="{'rotated':flipMode}" class="piece" (dragstart)="dragstart(x, y)"
+                        [draggable]="isPieceDraggable(piece)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <h2 class="game-message">{{message}}</h2>
+
+    <ng-container *ngIf="isPromotionActive">
+        <ng-container *ngTemplateOutlet="promotionDialog"></ng-container>
+    </ng-container>
+
+    <ng-template #promotionDialog>
+        <div class="promotion-dialog">
+            <img *ngFor="let piece of promotionPieces()" [src]="pieceImagePaths[piece]" (click)="promotePiece(piece)">
+            <span class="close-promotion-dialog" (click)="closePawnPromotionDialog()">
+                &times;
+            </span>
+        </div>
+    </ng-template>
+
+    <div class="move-list">
+        <move-list [moveList]="moveList" [gameHistoryLength]="gameHistory.length"
+            [gameHistoryPointer]="gameHistoryPointer" (showPreviousPositionEvent)="showPreviousPosition($event)">
+        </move-list>
+
+        <button mat-icon-button color="primary" (click)="flipBoard()">
+            <mat-icon>flip</mat-icon>
+        </button>
+    </div>
+</div>

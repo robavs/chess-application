@@ -1,0 +1,80 @@
+.evaluation-bar {
+    position: absolute;
+    top: 12%;
+    left: 0;
+    width: 20px;
+    height: 500px;
+    border: 1px solid blue
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    height: 5px;
+    width: 20px;
+    background-color: red;
+    transform: translate(-505, -50%);
+    z-index: 100
+}
+
+.percentage {
+    background-color: white;
+}
+
+.engine-top-lines {
+    position: absolute;
+    top: 12%;
+    left: 5%;
+    width: 350px;
+    height: 40px;
+    border: 2px solid blue;
+    color: white
+}
+
+
+/*Preview board mode*/
+.chess-board {
+    border: 3px solid black;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column-reverse;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
+.dark {
+    background-color: #779AAF
+}
+
+.light {
+    background-color: #D9E4E8;
+}
+
+.piece {
+    width: 20px;
+}
+
+.king-in-check {
+    box-shadow: inset rgb(179, 21, 0) 0px 0px 40px 0px, inset rgb(163, 11, 0) 0px 0px 40px 0px, inset rgba(0, 0, 0, 1) 0px 0px 36px -24px;
+}
+
+.last-move {
+    box-shadow: inset rgb(6, 179, 0) 0px 0px 40px 0px, inset rgb(6, 179, 0)0px 0px 40px 0px, inset rgba(0, 0, 0, 1) 0px 0px 36px -24px;
+}

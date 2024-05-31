@@ -1,0 +1,142 @@
+<div class="container">
+
+    <div class="pieces">
+        <img src="assets/cursor.png" [ngClass]="{'selected-piece': 'cursor' === selectedMode}"
+            (click)="selectMode('cursor')" draggable="false">
+
+        <ng-container *ngIf="flipMode">
+            <ng-container *ngTemplateOutlet="whitePiecess"></ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="!flipMode">
+            <ng-container *ngTemplateOutlet="blackPiecess"></ng-container>
+        </ng-container>
+
+        <img src="assets/bin.png" [ngClass]="{'selected-piece': 'bin' === selectedMode}" (click)="selectMode('bin')"
+            draggable="false">
+    </div>
+
+    <div #chessBoard class="chess-board" [ngClass]="{'rotated': flipMode}">
+        <div *ngFor="let i of boardView; let x = index" class="row">
+            <div *ngFor="let j of boardView; let y = index" class="square" [ngClass]="{ 
+                    'dragging-from': dragstartCoords && x === dragstartCoords.x && y === dragstartCoords.y ,
+                    'dark': isDark(x, y),
+                    'light': !isDark(x, y)}" (mousedown)="mousedown()" (mousemove)="mousemove(x, y)"
+                (click)="placePieceOnClick(x, y)" (dragstart)="dragstart(x, y)" (dragover)="dragover($event)"
+                (drop)="drop($event, x, y)">
+                <img *ngIf="boardView[x][y]" [src]="pieceImagePaths[boardView[x][y]!]"
+                    [draggable]="selectedMode === 'cursor'" [ngClass]="{'rotated': flipMode}">
+            </div>
+        </div>
+    </div>
+
+    <div class="pieces">
+        <img src="assets/cursor.png" [ngClass]="{'selected-piece': 'cursor' === selectedMode}"
+            (click)="selectMode('cursor')" draggable="false">
+
+        <ng-container *ngIf="flipMode">
+            <ng-container *ngTemplateOutlet="blackPiecess"></ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="!flipMode">
+            <ng-container *ngTemplateOutlet="whitePiecess"></ng-container>
+        </ng-container>
+
+        <img src="assets/bin.png" [ngClass]="{'selected-piece': 'bin' === selectedMode}" (click)="selectMode('bin')"
+            draggable="false">
+    </div>
+
+    <div style="position: absolute; right:0; top: 5%">
+        <div class="position-settings">
+            <form [formGroup]="positionConfigForm">
+                <mat-form-field>
+                    <mat-label>Player to move</mat-label>
+                    <mat-select formControlName="player">
+                        <mat-option value="w">White to move</mat-option>
+                        <mat-option value="b">Black to move</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <section class="example-section" formGroupName="castling">
+                    <mat-checkbox class="example-margin" formControlName="whiteKingSide">White O-O</mat-checkbox>
+                    <mat-checkbox class="example-margin" formControlName="blackKingSide">Black O-O</mat-checkbox>
+                    <mat-checkbox class="example-margin" formControlName="whiteQueenSide">White O-O-O</mat-checkbox>
+                    <mat-checkbox class="example-margin" formControlName="blackQueenSide">Black O-O-O</mat-checkbox>
+                </section>
+
+                <mat-form-field>
+                    <mat-label>En Passant</mat-label>
+                    <mat-select formControlName="enPassantTargetSquare">
+                        <mat-option value="-">None</mat-option>
+                        <mat-option *ngFor="let enPassantSquare of enPassantCalcuatedSquares"
+                            [value]="enPassantSquare">{{enPassantSquare}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
+        </div>
+
+        <div class="options">
+            <div>
+                <button mat-button (click)="startingPosition()">
+                    <mat-icon>refresh</mat-icon>
+                    <span>Starting position</span>
+                </button>
+            </div>
+
+            <div>
+                <button mat-button (click)="clearBoard()">
+                    <mat-icon>clear</mat-icon>
+                    <span>Clear board</span>
+                </button>
+            </div>
+
+            <div>
+                <button mat-button (click)="flipBoard()">
+                    <mat-icon>flip</mat-icon>
+                    <span>Flip board</span>
+                </button>
+            </div>
+
+            <div>
+                <button mat-button [disabled]="!isPositionValid" (click)="goToComputerMode()">
+                    <mat-icon>computer</mat-icon>
+                    <span>Computer</span>
+                </button>
+            </div>
+
+            <div>
+                <button mat-button [disabled]="!isPositionValid" (click)="analysisMode()">
+                    <mat-icon>computer</mat-icon>
+                    <span>Analysis mode</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- FEN positions -->
+        <form>
+            <mat-form-field class="fen-input">
+                <mat-label>FEN position</mat-label>
+                <input [formControl]="FENPositionForm" type="text" matInput placeholder="FEN position">
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" (click)="setFENPosition()">
+                Set position
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Cu napravim ovo da bude bolje Templates-->
+
+<ng-template #whitePiecess>
+    <img *ngFor="let piece of whitePieces" [src]="pieceImagePaths[piece] " [alt]="pieceImagePaths[piece]"
+        [ngClass]="{'selected-piece': piece === selectedMode}" (click)="selectMode(piece)"
+        (dragstart)="selectPieceFromBox(piece)">
+</ng-template>
+
+<ng-template #blackPiecess>
+    <img *ngFor="let piece of blackPieces" [src]="pieceImagePaths[piece] " [alt]="pieceImagePaths[piece]"
+        [ngClass]="{'selected-piece': piece === selectedMode}" (click)="selectMode(piece)"
+        (dragstart)="selectPieceFromBox(piece)">
+</ng-template>
